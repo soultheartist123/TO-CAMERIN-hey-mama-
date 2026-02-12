@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My CAMERIN (hey mama)</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@300;400;600&family=Playfair+Display:italic,wght@700&display=swap');
+
+        :root {
+            --primary-pink: #ffafcc;
+            --accent-pink: #fb6f92;
+            --deep-rose: #c9184a;
+            --glass: rgba(255, 255, 255, 0.95);
+            --shadow: 0 20px 50px rgba(0,0,0,0.1);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #fff0f3 0%, #ffccd5 100%);
+            margin: 0;
+            font-family: 'Quicksand', sans-serif;
+            color: #444;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* --- ENVELOPE SECTION --- */
+        #splash {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle, #fff5f7, #ffccd5);
+            transition: opacity 0.8s ease;
+        }
+
+        .click-instruction {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            color: var(--deep-rose);
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.95); }
+        }
+
+        .envelope-wrapper {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .envelope-main {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background: #f8adbc;
+            border-radius: 8px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .heart-seal {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            background: #ff4d6d;
+            transform: rotate(45deg);
+            z-index: 10;
+            animation: breathe 2s infinite;
+        }
+        .heart-seal::before, .heart-seal::after {
+            content: "";
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: #ff4d6d;
+            border-radius: 50%;
+        }
+        .heart-seal::before { left: -25px; }
+        .heart-seal::after { top: -25px; }
+
+        @keyframes breathe { 0%, 100% { transform: scale(1) rotate(45deg); } 50% { transform: scale(1.1) rotate(45deg); } }
+
+        /* --- CONTENT SECTION --- */
+        #content {
+            display: none;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            animation: fadeIn 1.5s ease;
+        }
+
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border-radius: 40px;
+            padding: 60px 30px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2.2rem, 8vw, 3.5rem);
+            color: var(--deep-rose);
+            margin-bottom: 30px;
+        }
+
+        .poem-box {
+            font-size: 1.25rem;
+            line-height: 1.8;
+            color: #4a4a4a;
+            max-width: 600px;
+            margin: 0 auto 50px auto;
+            font-style: italic;
+        }
+
+        .poem-stanza { margin-bottom: 25px; }
+
+        /* --- POLAROIDS --- */
+        .photo-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            margin: 40px auto;
+            max-width: 450px;
+        }
+
+        .polaroid {
+            background: white;
+            padding: 15px 15px 35px 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transform: rotate(var(--r));
+        }
+
+        .polaroid img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border: 1px solid #eee;
+        }
+
+        .polaroid-caption {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.2rem;
+            color: #444;
+            margin-top: 15px;
+            line-height: 1.4;
+        }
+
+        /* --- BUTTONS --- */
+        .btn-yes {
+            background: var(--accent-pink); color: white; padding: 20px 70px;
+            font-size: 1.6rem; border-radius: 60px; border: none; cursor: pointer;
+            font-weight: 600; box-shadow: 0 15px 30px rgba(251, 111, 146, 0.3); transition: 0.3s;
+        }
+        .btn-yes:hover { transform: scale(1.1); background: var(--deep-rose); }
+        
+        #noBtn { 
+            background: #f0f0f0; color: #999; border: none; padding: 12px 25px; 
+            border-radius: 50px; cursor: pointer; margin-top: 20px; transition: 0.1s;
+        }
+
+        /* --- SUCCESS PAGE --- */
+        #success { display: none; max-width: 800px; margin: 0 auto; padding: 40px 20px; animation: fadeIn 1s ease; }
+
+        .rose-section { margin: 50px auto; display: flex; flex-direction: column; align-items: center; }
+        .love-msg { font-family: 'Dancing Script', cursive; font-size: 2.2rem; color: var(--deep-rose); opacity: 0; transition: 1s ease; }
+        .love-msg.visible { opacity: 1; }
+        .rose-anchor { position: relative; width: 100%; height: 60px; display: flex; justify-content: center; }
+        .gathering-rose { position: absolute; font-size: 24px; animation: gatherUnder 2.5s forwards; }
+
+        @keyframes gatherUnder {
+            0% { transform: translate(var(--rx), var(--ry)) scale(0); opacity: 0; }
+            100% { transform: translate(var(--tx), 0) scale(1) rotate(var(--rot)); opacity: 1; }
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .particle { position: fixed; pointer-events: none; z-index: 1000; animation: floatUp 4s forwards linear; }
+        @keyframes floatUp { 
+            0% { transform: translate(var(--startX), var(--startY)) rotate(0deg); opacity: 1; } 
+            100% { transform: translate(var(--endX), -20vh) rotate(360deg); opacity: 0; } 
+        }
+    </style>
+</head>
+<body>
+
+    <!-- STEP 1: THE ENVELOPE -->
+    <div id="splash">
+        <div class="click-instruction">Click the envelope to open, CAMERIN (hey mama)...</div>
+        <div class="envelope-wrapper" onclick="openLetter()">
+            <div class="envelope-main">
+                <div class="heart-seal"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 2: THE MAIN CONTENT -->
+    <div id="content">
+        <div class="glass-card">
+            <iframe src="https://open.spotify.com/embed/track/2v9yY876mKue07fVpTzC4r?utm_source=generator" width="100%" height="80" frameBorder="0" allow="autoplay; encrypted-media;"></iframe>
+
+            <h1>My Dearest CAMERIN,</h1>
+
+            <div class="poem-box">
+                <div class="poem-stanza">
+                    Explaining how I feel about you is not as easy as just saying I Love You.
+                </div>
+                <div class="poem-stanza">
+                    A glimpse into the future, hearing for better or worse,<br>so I wrote this verse.
+                </div>
+                <div class="poem-stanza">
+                    Every story has got a beginning, middle & end,<br>I have loved every bit of our beginning,<br>can't wait to explore the middle & I pray we together till the end.
+                </div>
+                <div class="poem-stanza">
+                    I want to be able to plan our future together & still be able to find the time to live in the present.
+                </div>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #ffccd5; margin: 40px 0;">
+
+            <div class="photo-grid">
+                <!-- Photo 1 -->
+                <div class="polaroid" style="--r: -2deg">
+                    <img src="https://drive.google.com/thumbnail?id=1vVyfzrAx4VjW1NRJ8WF_7SBJt7PFjh5N&sz=w1000">
+                    <div class="polaroid-caption">The light inside of me brightens everytime I get to hear your voice, my soul became yours the first day I said I Love You. ✨</div>
+                </div>
+                
+                <!-- Photo 2 -->
+                <div class="polaroid" style="--r: 3deg">
+                    <img src="https://drive.google.com/thumbnail?id=1sEI5gBcurvfOTP3cSTwnnXjE4u8otb7c&sz=w1000">
+                    <div class="polaroid-caption">I know there's a God because he loves me enough to bless me with you, you chose me and I chose you. ❤️</div>
+                </div>
+
+                <!-- Photo 3 -->
+                <div class="polaroid" style="--r: -1.5deg">
+                    <img src="https://drive.google.com/thumbnail?id=1vgFk_IvxrzLqDz6owjqheRcIgfA_Gjt_&sz=w1000">
+                    <div class="polaroid-caption">I'm not promising rainbow and sunshines all the time but I am promising to love you and be here through the good or bad. 🌸</div>
+                </div>
+
+                <!-- Photo 4 -->
+                <div class="polaroid" style="--r: 2deg">
+                    <img src="https://drive.google.com/thumbnail?id=1IsMfzrTAbhVjODVre_VeatGmybRfgVjl&sz=w1000">
+                    <div class="polaroid-caption">It all started with a simple DM & 4 months later I'm still the happiest man alive. 💖</div>
+                </div>
+
+                <!-- Photo 5 -->
+                <div class="polaroid" style="--r: -3deg">
+                    <img src="https://drive.google.com/thumbnail?id=1KNygMiuS0Q8zXkqHTVUgRYtZ7ImKp2I8&sz=w1000">
+                    <div class="polaroid-caption">Looking forward to building a future with you mama, I love you in ways even science cannot explain. ♾️</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 60px;">
+                <h2 style="font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--deep-rose);">Will you be my Valentine?</h2>
+                <button class="btn-yes" onclick="showSuccess()">YES! ❤️</button>
+                <br>
+                <button id="noBtn" onmouseover="moveNo()">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 3: SUCCESS PAGE -->
+    <div id="success">
+        <div class="glass-card">
+            <div style="font-size: 80px; margin-bottom: 10px;">🧸</div>
+            <h1>Thank you for choosing me.</h1>
+            <iframe src="https://open.spotify.com/embed/track/723kBcWHaPWeAApqdYguSI?utm_source=generator" width="100%" height="80" frameBorder="0" allow="autoplay; encrypted-media;"></iframe>
+
+            <p style="font-size: 1.2rem; line-height: 2; color: #444; max-width: 500px; margin: 30px auto;">
+                My heart is so incredibly full right now. Thank you, Camerin, for choosing to walk this life with me. 
+                <strong>It's me and you, forever.</strong>
+            </p>
+
+            <div class="rose-section">
+                <div class="love-msg" id="loveMsg">I LOVE YOU CAMERIN (hey mama)</div>
+                <div class="rose-anchor" id="roseAnchor"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function spawnParticle(symbol, fromCenter) {
+            const p = document.createElement('div');
+            p.classList.add('particle');
+            p.innerHTML = symbol;
+            const startX = fromCenter ? 50 : Math.random() * 100;
+            const startY = fromCenter ? 50 : 100;
+            p.style.setProperty('--startX', startX + 'vw');
+            p.style.setProperty('--startY', startY + 'vh');
+            p.style.setProperty('--endX', (Math.random() * 140 - 20) + 'vw');
+            p.style.fontSize = (Math.random() * 20 + 20) + 'px';
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), 4000);
+        }
+
+        function openLetter() {
+            for(let i=0; i<60; i++) { setTimeout(() => spawnParticle('❤️', true), i * 15); }
+            document.getElementById('splash').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+            window.scrollTo(0,0);
+        }
+
+        function moveNo() {
+            const btn = document.getElementById('noBtn');
+            btn.style.position = 'fixed';
+            btn.style.left = Math.random() * (window.innerWidth - 100) + 'px';
+            btn.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+        }
+
+        function showSuccess() {
+            document.getElementById('content').style.display = 'none';
+            document.getElementById('success').style.display = 'block';
+            window.scrollTo(0,0);
+            const msg = document.getElementById('loveMsg');
+            const anchor = document.getElementById('roseAnchor');
+            setTimeout(() => msg.classList.add('visible'), 500);
+            for(let i=0; i<50; i++) {
+                const rose = document.createElement('div');
+                rose.className = 'gathering-rose';
+                rose.innerHTML = '🌹';
+                rose.style.setProperty('--rx', (Math.random() - 0.5) * 2000 + 'px');
+                rose.style.setProperty('--ry', (Math.random() - 0.5) * 2000 + 'px');
+                rose.style.setProperty('--tx', (Math.random() - 0.5) * 300 + 'px');
+                rose.style.setProperty('--rot', (Math.random() * 360) + 'deg');
+                anchor.appendChild(rose);
+            }
+            for(let i=0; i<100; i++) { setTimeout(() => spawnParticle('💖', false), i * 40); }
+        }
+    </script>
+</body>
+</html>
